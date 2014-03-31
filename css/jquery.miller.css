@@ -1,4 +1,4 @@
-.miller
+.miller-column-browser
 {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 0.8em;
@@ -15,9 +15,16 @@
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+	display: block;
 }
-
-.miller div.columns
+.ng-scope.miller-column-browser {
+	resize: vertical;
+	overflow: auto;
+}
+.miller-column-browser > * {
+	resize: none;
+}
+.miller-column-browser div.columns
 {
 	position: absolute;
 	width: 100%;
@@ -29,7 +36,7 @@
 	overflow: auto;
 }
 
-.miller div.path
+.miller-column-browser div.path
 {
 	position: absolute;
 	border-bottom: solid 1px #ddd;
@@ -45,7 +52,7 @@
 	z-index: 9999;
 }
 
-.miller div.path span
+.miller-column-browser div.path span
 {
 	margin-left: 0.5em;
 	padding-left: 1.5em;
@@ -57,7 +64,7 @@
 	cursor: pointer;
 }
 
-.miller div.toolbar
+.miller-column-browser div.toolbar
 {
 	position: absolute;
 	border-top: solid 1px #ddd;
@@ -73,17 +80,17 @@
 	z-index: 9999;
 }
 
-.miller div.toolbar span
+.miller-column-browser div.toolbar span
 {
 	padding-left: 1em;
 	padding-right: 1em;
 	cursor: pointer;
 }
 
-.miller div.columns ul
+.miller-column-browser div.columns ul
 {
+	float: left;
 	box-shadow: #aaa 4px 0 8px 0px;
-	position: absolute;
 	border-right: solid 1px #ddd;
 	padding: 0;
 	margin: 0;
@@ -91,9 +98,11 @@
 	overflow: auto;
 	width: 100px;
 	height: 100%;
+	top: 0;
+	resize: horizontal;
 }
 
-.miller li
+.miller-column-browser li
 {
 	border: solid 1px #fff;
 	padding-left: 0.5em;
@@ -104,14 +113,14 @@
 	line-height: 25px;
 }
 
-.miller li.parent
+.miller-column-browser li.parent
 {
 	background-image: url('../images/chevron-black.png');
 	background-repeat: no-repeat;
 	background-position: 100% 50%;
 }
 
-.miller li.parentLoading
+.miller-column-browser li.parentLoading
 {
 	color: #fff;
 	background: #08c;
@@ -120,7 +129,7 @@
 	background-position: 100% 50%;
 }
 
-.miller li.parentSelected
+.miller-column-browser li.parentSelected
 {
 	color: #fff;
 	background: #08c;
@@ -129,13 +138,13 @@
 	background-position: 100% 50%;
 }
 
-.miller li.selected
+.miller-column-browser li.selected
 {
 	color: #fff;
 	background: #08c;
 }
 
-.miller div.grip
+.miller-column-browser div.grip
 {
 	cursor: col-resize;
 	position: absolute;
@@ -147,12 +156,12 @@
 	background-position: 0 0;
 }
 
-.miller ul.pane
+.miller-column-browser ul.pane
 {
 	background: #fff;
 }
 
-.miller ul.pane li
+.miller-column-browser ul.pane li
 {
 	margin: 0;
 	padding: 0;
@@ -166,7 +175,7 @@
 	border: none;
 }
 
-.miller ul.pane li
+.miller-column-browser ul.pane li
 {
 	width: 100%;
 }
