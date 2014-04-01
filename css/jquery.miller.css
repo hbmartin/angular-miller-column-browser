@@ -120,7 +120,7 @@
 	background-position: 100% 50%;
 }
 
-.miller-column-browser li.parentLoading
+.miller-column-browser li.loading
 {
 	color: #fff;
 	background: #08c;
@@ -129,7 +129,7 @@
 	background-position: 100% 50%;
 }
 
-.miller-column-browser li.parentSelected
+.miller-column-browser li.parent.selected
 {
 	color: #fff;
 	background: #08c;

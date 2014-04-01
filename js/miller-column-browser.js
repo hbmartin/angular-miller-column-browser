@@ -22,105 +22,86 @@ angular.module('millerColumnBrowser', [])
   			});
     var currentLine = null;
 	var path, columns, toolbar;
+	
+	var removeNextColumns = function(e) {
+		var line = angular.element(this),
+			column = line.parent(), i;
+	
+		while ( (i = column.next()) && i.length) {
+			i.remove();
+		}
+	
+		column.children().removeClass('selected');
+		line.addClass('selected');			
+	};
+	
 	var getLines = function(event) {
 			var $el = angular.element(event.target);
 			var id = $el.data('id');
-			console.log(id);
-			$el.removeClass('parentSelected').addClass('parentLoading');
+			$el.addClass('selected').addClass('loading');
 
 			// TODO: pass callback handler into here
 			// then que up the result and pass back into buildColumn
-			$el.removeClass('parentLoading');
+			$el.removeClass('loading');
 			buildColumn(dummy);
-		}
-	;
+	};
+	
 	var buildColumn = function(lines) {
-			if (lines == null) {
-				$('li.parentLoading').remove();
-			} else {
-				if (currentLine && toolbar) {
-					toolbar.children().remove();
+			if (currentLine && toolbar) {
+//					toolbar.children().remove();
+//					$.each(settings.toolbar.options, function(key, callback) {
+//							$('<span>', { 'text': key })
+//								.click(function() { callback.call(miller, currentLine.data('id')) })
+//								.appendTo(toolbar)
+//							;
+//						}
+//					);
+			}
+			
+			if (lines.length <= 0) {
+				var line = $('li.loading')
+					.removeClass('parent')
+					.addClass('selected')
+				;
 
-					$.each(settings.toolbar.options, function(key, callback) {
-							$('<span>', { 'text': key })
-								.click(function() { callback.call(miller, currentLine.data('id')) })
-								.appendTo(toolbar)
-							;
-						}
-					);
-				}
-
-				if (currentLine) {
-					var currentColumn = currentLine.parent();
-					var scroll = 0;
-					var scrollTop = currentColumn.scrollTop();
-					var topOfCurrentLine = currentLine.position().top;
-
-					if (topOfCurrentLine < 0) {
-						scroll = topOfCurrentLine;
-					} else {
-						var bottomOfCurrentLine = currentLine.position().top + currentLine.height();
-						var heightOfCurrentColumn = currentColumn.height();
-
-						if (bottomOfCurrentLine > heightOfCurrentColumn) {
-							scroll = bottomOfCurrentLine - heightOfCurrentColumn;
-						}
-					}
-
-					currentColumn.scrollTop(scrollTop + scroll);
-				}
-
-				var width = 0;
-				
-				if (lines.length <= 0) {
-					var line = $('li.parentLoading')
-						.removeClass('parent')
-						.addClass('selected')
+				if (!$.isEmptyObject(settings.pane.options)) {
+					var pane = $('<ul>')
+						.css({ 'top': 0, 'left': width })
+						.addClass('pane')
 					;
 
-					if (!$.isEmptyObject(settings.pane.options)) {
-						var pane = $('<ul>')
-							.css({ 'top': 0, 'left': width })
-							.addClass('pane')
-						;
+					var id = line.data('id');
 
-						var id = line.data('id');
-
-						$.each(settings.pane.options, function(key, callback) {
-								$('<li>', { 'text': key })
-									.click(function() { callback.call(miller, currentLine.data('id')) })
-									.appendTo(pane)
-								;
-							}
-						);
-
-						columns
-							.append(pane)
-							.scrollLeft(width + pane.width())
-						;
-					}
-				} else {
-//					$('li.parentLoading').addClass('parentSelected');
-					var column = angular.element("<ul class='miller-column-browser-column'>");
-					angular.forEach(lines, function(data, id) {
-							var line = angular.element('<li>').text(data['name'])
-								.data('id', data['id'])
-								.on('click', getLines)
-//								.click(removeNextColumns)
-//								.click(getLines)
+					$.each(settings.pane.options, function(key, callback) {
+							$('<li>', { 'text': key })
+								.click(function() { callback.call(miller, currentLine.data('id')) })
+								.appendTo(pane)
 							;
-							column.append(line);
-
-							if (data['parent']) {
-								line.addClass('parent');
-							}
-							if (data['class']) {
-								line.addClass(data['class']);
-							}
 						}
 					);
-					columns.append(column);
+
+					columns
+						.append(pane)
+						.scrollLeft(width + pane.width())
+					;
 				}
+			} else {
+//					$('li.loading').addClass('selected');
+				var column = angular.element("<ul class='miller-column-browser-column'>");
+				angular.forEach(lines, function(data, id) {
+						var line = angular.element('<li>').text(data['name'])
+							.data('id', data['id'])
+							.on('click', removeNextColumns)
+							.on('click', getLines)
+						;
+						column.append(line);
+
+						if (data['parent']) {
+							line.addClass('parent');
+						}
+					}
+				);
+				columns.append(column);
 			}
 		}
 	;
@@ -131,9 +112,10 @@ angular.module('millerColumnBrowser', [])
 		}
 
 		element.addClass('miller-column-browser');
-		path = angular.element(element.append('<div class="path">').children()[0]);
-		columns = angular.element(element.append('<div class="columns">').children()[1]);
-		toolbar = angular.element(element.append('<div class="toolbar">').children()[2]);
+		var children = element.children();
+		path = angular.element(children[0]);
+		columns = angular.element(children[1]);
+		toolbar = angular.element(children[2]);
 
 		if (attrs.init) {
 			// TODO: what if this is a function?
@@ -147,6 +129,6 @@ angular.module('millerColumnBrowser', [])
     return {
 		link: link,
 		restrict: 'E',
-		template: ''
+		template: '<div class="path"></div><div class="columns"></div><div class="toolbar"></div>'
     };
   });
