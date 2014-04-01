@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('millerColumnBrowser', [])
-  .directive('columnBrowser', function($parse, $q) {
+  .directive('columnBrowser', function($parse, $q, $http) {
   	var settings = {
 		  				'tabindex': 0,
 		  				'toolbar': {
@@ -74,7 +74,7 @@ angular.module('millerColumnBrowser', [])
 			} else {
 				var column = angular.element("<ul class='miller-column-browser-column'>");
 				angular.forEach(lines, function(data, id) {
-						var line = angular.element('<li>').text(data['name'])
+						var line = angular.element('<li>').text(data['name'] || data['id'])
 							.attr('id', data['id'])
 							.attr('data-json', JSON.stringify(data))
 							.on('click', removeNextColumns)
@@ -111,12 +111,18 @@ angular.module('millerColumnBrowser', [])
 		wrapper = angular.element(children[1]) 
 		columns = angular.element(wrapper.children()[0]);
 		toolbar = angular.element(children[2]);
-
-		if (attrs.init) {
+		
+		if (scope.initData) {
 			// TODO: what if this is a function?
 			try {
 				buildColumn(JSON.parse(attrs.init));
 			} catch (e) { }
+		}
+		else if (scope.initUrl) {
+			$http.get(scope.initUrl)
+					.success(function(data) {
+						buildColumn(data);
+					});
 		}
 	}
 	
@@ -126,7 +132,8 @@ angular.module('millerColumnBrowser', [])
         scope: {
           onSelected: '&onSelected',
 		  settings: '=',
-		  init: '='
+		  initData: '=',
+		  initUrl: '@'
         },
 		template: '<div class="path"></div><div class="wrapper"><div class="columns"></div></div><div class="toolbar"></div>'
     };
