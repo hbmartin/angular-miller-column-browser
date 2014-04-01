@@ -1,24 +1,20 @@
 'use strict';
 
 angular.module('millerColumnBrowser', [])
-  .directive('columnBrowser', function() {
-	  var dummy = false;
-  	var hasFocus = false;
-  	var currentAjaxRequest = null;
-  	var settings = angular.extend({}, {
-  				'transform': function(lines) { return lines; },
-  				'preloadedData': {},
-  				'tabindex': 0,
-  				'minWidth': 40,
-  				'toolbar': {
-  					'options': {}
-  				},
-  				'pane': {
-  					'options': {}
-  				}
-  			});
+  .directive('columnBrowser', function($parse, $q) {
+  	var settings = {
+		  				'tabindex': 0,
+		  				'minWidth': 40,
+		  				'toolbar': {
+		  					'options': {}
+		  				},
+		  				'pane': {
+		  					'options': {}
+		  				}
+		  			};
     var currentLine = null;
 	var path, columns, toolbar;
+	var callback;
 	
 	var removeNextColumns = function(e) {
 		var line = angular.element(this),
@@ -36,11 +32,13 @@ angular.module('millerColumnBrowser', [])
 			currentLine = angular.element(event.target);
 			var id = currentLine.data('id');
 			currentLine.addClass('selected').addClass('loading');
-
 			// TODO: pass callback handler into here
 			// then que up the result and pass back into buildColumn
-			buildColumn(dummy);
-			currentLine.removeClass('loading');
+			var promise = $q.when(callback(currentLine));
+			promise.then(function(data){
+				currentLine.removeClass('loading');
+				buildColumn(data);
+			});
 	};
 	
 	var buildColumn = function(lines) {
@@ -55,7 +53,7 @@ angular.module('millerColumnBrowser', [])
 //					);
 			}
 			
-			if (lines.length <= 0) {
+			if (!Array.isArray(lines) || lines.length <= 0) {
 				if (settings.pane.options.length) {
 					var pane = angular.element('<ul>')
 						.css({ 'top': 0, 'left': width })
@@ -78,7 +76,8 @@ angular.module('millerColumnBrowser', [])
 				var column = angular.element("<ul class='miller-column-browser-column'>");
 				angular.forEach(lines, function(data, id) {
 						var line = angular.element('<li>').text(data['name'])
-							.data('id', data['id'])
+							.attr('id', data['id'])
+							.attr('data-json', JSON.stringify(data))
 							.on('click', removeNextColumns)
 							.on('click', getLines)
 						;
@@ -98,7 +97,12 @@ angular.module('millerColumnBrowser', [])
 		if (!element.attr('tabindex')) {
 			element.attr('tabindex', settings.tabindex);
 		}
-
+		if (scope.onSelected) {
+			callback=$parse(scope.onSelected)(scope);
+		}
+		if (scope.settings) {
+			angular.extend(settings, scope.settings);
+		}
 		element.addClass('miller-column-browser');
 		var children = element.children();
 		path = angular.element(children[0]);
@@ -108,8 +112,7 @@ angular.module('millerColumnBrowser', [])
 		if (attrs.init) {
 			// TODO: what if this is a function?
 			try {
-				dummy = JSON.parse(attrs.init);
-				buildColumn(dummy);
+				buildColumn(JSON.parse(attrs.init));
 			} catch (e) { }
 		}
 	}
@@ -117,6 +120,10 @@ angular.module('millerColumnBrowser', [])
     return {
 		link: link,
 		restrict: 'E',
+        scope: {
+          onSelected: '&onSelected',
+		  settings: '='
+        },
 		template: '<div class="path"></div><div class="columns"></div><div class="toolbar"></div>'
     };
   });
