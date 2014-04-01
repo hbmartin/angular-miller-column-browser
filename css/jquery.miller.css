@@ -6,8 +6,6 @@
 	border: solid 1px #ddd;
 	border-radius: 4px;
 	padding: 0;
-	margin-bottom: 20px;
-	width: 600px;
 	height: 169px;
 	background: #f5f5f5;
 	outline: 0;
@@ -16,24 +14,30 @@
 	-webkit-user-select: none;
 	user-select: none;
 	display: block;
+	margin: 0 auto;
+	width: 90%;
 }
 .ng-scope.miller-column-browser {
-	resize: vertical;
 	overflow: auto;
 }
 .miller-column-browser > * {
 	resize: none;
 }
-.miller-column-browser div.columns
-{
+.miller-column-browser div.wrapper {
 	position: absolute;
 	width: 100%;
-	height: 129px;
+	overflow-x:auto;
+	overflow-y:hidden;
 	left: 0;
 	top: 20px;
+}
+.miller-column-browser div.columns
+{
+	width: 100%;
+	height: 129px;
+
 	padding: 0;
 	margin: 0;
-	overflow: auto;
 }
 
 .miller-column-browser div.path
@@ -96,10 +100,9 @@
 	margin: 0;
 	background: #fcfcfc;
 	overflow: auto;
-	width: 100px;
+	width: 300px;
 	height: 100%;
 	top: 0;
-	resize: horizontal;
 }
 
 .miller-column-browser li
@@ -142,18 +145,6 @@
 {
 	color: #fff;
 	background: #08c;
-}
-
-.miller-column-browser div.grip
-{
-	cursor: col-resize;
-	position: absolute;
-	width: 2px;
-	height: 100%;
-	background-image: url('../images/grip.png');
-	background-color: #000;
-	background-repeat: repeat-y;
-	background-position: 0 0;
 }
 
 .miller-column-browser ul.pane
