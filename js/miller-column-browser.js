@@ -65,17 +65,14 @@ angular.module('millerColumnBrowser', [])
 					var id = line.data('id');
 
 					angular.forEach(settings.pane.options, function(callback, key) {
-							angular.element('<li>', { 'text': key })
+							var j = angular.element('<li>').text(key)
 								.click(function() { callback.call(miller, loading.data('id')) })
-								.appendTo(pane)
 							;
+							pane.append(j);
 						}
 					);
 
-					columns
-						.append(pane)
-						.scrollLeft(width + pane.width())
-					;
+					columns.append(pane);
 				}
 			} else {
 				var column = angular.element("<ul class='miller-column-browser-column'>");

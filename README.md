@@ -1,17 +1,16 @@
-# jQuery.miller.js
+# angular-miller-column-browser
 
-## An implementation of [Miller columns](http://en.wikipedia.org/wiki/Miller_columns) with [jQuery](http://jquery.com)!
+## An implementation of [Miller columns](http://en.wikipedia.org/wiki/Miller_columns) with [AngularJS](http://angularjs.org/)!
 
 It's a work in progress, so use it carefully!  
-If you want to see this plugin in action, there is a [demo](http://mgbx.net/demomiller).
+If you want to see this plugin in action, see [angular-rest-browser](https://github.com/hbmartin/angular-rest-browser).
 
 ## Features
 
-* Ajax call to retrieve data.
-* Keyboard navigation.
+* Keyboard navigation. (coming soon)
 * Full customizable preview pane.
 * Full customizable toolbar.
-* Redimensionable columns.
+* Resizable columns.
 
 ## How to use it ?
 
@@ -21,18 +20,18 @@ To use it:
 2. Add this line in the head of your html page:--
 
 ``` html
-<link href="url/to/css/jquery.miller.css" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="../bower_components/angular-miller-column-browser/css/jquery.miller.css" />
 ```
 
-3. Add a `div` in the body of your html page.  
-4. Add these lines at the end of the body of your html page:  
+3. Add a `<column-browser></column-browser>` directive in your view.  
+4. Add this line to your angular scripts:  
 
 ``` html
-<script type="text/javascript" src="url/to/js/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="url/to/js/jquery.miller.js"></script>
+<script src="../bower_components/angular-miller-column-browser/js/miller-column-browser.js"></script>
 ```
 
-5. Create a JavaScript script with this content and add it t the end of the body of your html page:
+5. TODO: fix this step...
+Create a JavaScript script with this content and add it t the end of the body of your html page:
 
 ``` JavaScript
 $(document).ready(function() { $('div').miller() });
