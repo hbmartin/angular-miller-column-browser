@@ -12,7 +12,7 @@ angular.module('millerColumnBrowser', [])
 		  				}
 		  			};
     var currentLine = null;
-	var path, columns, toolbar;
+	var path, columns, toolbar, wrapper;
 	var callback;
 	
 	var removeNextColumns = function(e) {
@@ -88,7 +88,9 @@ angular.module('millerColumnBrowser', [])
 					}
 				);
 				columns.append(column);
-				columns.css("width", (columns.children().length * 302) + "px");
+				var width = columns.children().length * 302;
+				columns.css("width", width + "px");
+				wrapper[0].scrollLeft = width;
 			}
 		}
 	;
@@ -106,7 +108,8 @@ angular.module('millerColumnBrowser', [])
 		element.addClass('miller-column-browser');
 		var children = element.children();
 		path = angular.element(children[0]);
-		columns = angular.element(children[1].children[0]);
+		wrapper = angular.element(children[1]) 
+		columns = angular.element(wrapper.children()[0]);
 		toolbar = angular.element(children[2]);
 
 		if (attrs.init) {
