@@ -75,15 +75,14 @@ angular.module('millerColumnBrowser', [])
 				var column = angular.element("<ul class='miller-column-browser-column'>");
 				angular.forEach(lines, function(data, id) {
 						var line = angular.element('<li>').text(data['name'] || data['id'])
-							.attr('id', data['id'])
-							.attr('data-json', JSON.stringify(data))
+							.attr('id', data['uid'] || data['id'] || "")
 							.on('click', removeNextColumns)
 							.on('click', getLines)
 						;
 						column.append(line);
 
-						if (data['parent']) {
-							line.addClass('parent');
+						if (data['child']) {
+							line.attr('data-child', JSON.stringify(data['child'])).addClass('parent');
 						}
 					}
 				);
